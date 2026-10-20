@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta property="og:title" content="복현동 지붕공사 완성 예상도">
+<meta property="og:description" content="A안·B안을 바꿔 보는 3D 완성 예상도">
+<style>[hidden]{display:none!important}</style>
+<title>복현동 지붕 완성 예상도</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sticky 3D viewer on the left, takeoff sheet on the right; stacks on phone. Site-drawing feel, graphite + safety orange. */
+:root{
+  --bg:#eef0f2; --fg:#1d2228; --muted:#5f6873; --line:#d3d8de; --panel:#ffffff; --soft:#f5f6f7;
+  --accent:#d9531e; --steel:#3d4a5c; --roof:#4a4f55; --ok:#2e7d4f;
+  --f-body:"IBM Plex Sans KR","Noto Sans KR","Apple SD Gothic Neo",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#13171c; --fg:#e7eaee; --muted:#9aa4b0; --line:#2a313a; --panel:#1a1f26; --soft:#20262e; --accent:#f07a45; --steel:#8fa0b6; --roof:#9aa1a9; --ok:#5cc58a; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#13171c; --fg:#e7eaee; --muted:#9aa4b0; --line:#2a313a; --panel:#1a1f26; --soft:#20262e; --accent:#f07a45; --steel:#8fa0b6; --roof:#9aa1a9; --ok:#5cc58a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px;margin:0}
+header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px;margin-bottom:14px}
+h1{font-size:22px;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:13px;margin-top:2px}
+.kpis{display:flex;flex-wrap:wrap;gap:8px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:7px 12px;min-width:118px}
+.kpi b{display:block;font-size:17px;font-variant-numeric:tabular-nums}
+.kpi span{font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+.layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:980px){.layout{grid-template-columns:minmax(0,1fr)}.viewer{position:static!important;height:62vh!important}}
+.viewer{position:sticky;top:max(12px,env(safe-area-inset-top,0px));height:calc(100vh - 32px);min-height:420px;display:flex;flex-direction:column;gap:8px}
+.stage{position:relative;flex:1;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#cfd8e2}
+canvas{display:block;width:100%;height:100%}
+.views{position:absolute;left:10px;top:10px;right:10px;display:flex;flex-wrap:wrap;gap:6px}
+.btn{font:inherit;font-size:12.5px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:4px;padding:6px 10px;cursor:pointer}
+.btn[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn:focus-visible,input:focus-visible,tr[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.focusbar[hidden]{display:none}.focusbar[hidden]{display:none}.focusbar{position:absolute;left:10px;bottom:10px;right:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.focusbar .tag{background:var(--accent);color:#fff;border-radius:4px;padding:5px 10px;font-size:12.5px;font-weight:600}
+.toggles{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted)}
+.toggles label{display:flex;align-items:center;gap:5px;cursor:pointer}
+.sw{width:11px;height:11px;border-radius:2px;display:inline-block}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px;min-width:0}
+h2{font-size:15px;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+h2 small{font-weight:400;color:var(--muted);font-size:12px}
+.plan img{width:100%;height:auto;border-radius:4px;border:1px solid var(--line);display:block;background:#cfd8e2}
+.cond{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 14px;font-size:12.5px}
+.cond div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--line);padding:3px 0}
+.cond dt{color:var(--muted)}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th{font-size:11.5px;color:var(--muted);font-weight:600;text-align:right;padding:6px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child{text-align:left}
+td{padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top;text-align:right}
+td:first-child{text-align:left}
+tr.cat td{background:var(--soft);font-weight:700;font-size:12px;letter-spacing:.04em;color:var(--muted);text-align:left;padding:5px 6px}
+tr.item{cursor:pointer}
+tr.item:hover td{background:var(--soft)}
+tr.item.sel td{background:color-mix(in srgb,var(--accent) 12%,var(--panel))}
+.nm{font-weight:600}
+.sp{font-size:11.5px;color:var(--muted)}
+.bs{font-size:11.5px;color:var(--muted);margin-top:2px;max-width:34ch}
+.opt{font-size:10.5px;border:1px solid var(--line);border-radius:3px;padding:0 4px;color:var(--muted);margin-left:4px;font-weight:500}
+.ord{font-weight:700}
+.ord small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+input.num{width:56px;font:inherit;font-size:12.5px;text-align:right;padding:3px 5px;border:1px solid var(--line);border-radius:3px;background:var(--panel);color:var(--fg);font-variant-numeric:tabular-nums}
+input.price{width:84px}
+.amt{white-space:nowrap}
+tfoot td{font-weight:700;border-bottom:none;padding-top:10px}
+.note{font-size:12px;color:var(--muted);line-height:1.6}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.toast{font-size:12px;color:var(--ok)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.steps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start}
+.steps .n{width:28px;height:28px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-weight:700;font-size:13px}
+.steps b{display:block}
+.steps span{color:var(--muted);font-size:13px}
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.spec div{background:var(--soft);border-radius:5px;padding:9px 11px}
+.spec span{display:block;font-size:11.5px;color:var(--muted)}
+.spec b{font-size:15px}
+.planbar{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.planbar .btn{font-size:13.5px;padding:8px 12px}.planbar .btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.plandesc{font-size:13.5px;margin-top:8px;max-width:70ch}
+.swatch{display:inline-block;width:14px;height:14px;border-radius:3px;background:#4a4f55;vertical-align:-2px;margin-right:6px;border:1px solid var(--line)}
+</style>
+
+</head><body>
+<header>
+  <div>
+    <h1>복현동 지붕공사 완성 예상도</h1>
+    <div class="sub">2층 기존 콘크리트 지붕 위에 철골을 올리고 진회색 지붕판넬로 새로 덮는 공사입니다</div>
+    <div class="planbar" role="group" aria-label="안 선택">
+      <button class="btn" data-plan="A" aria-pressed="true">A안 · 현재 지붕 크기 그대로</button>
+      <button class="btn" data-plan="B" aria-pressed="false">B안 · 베란다까지 2m 연장</button>
+    </div>
+    <p class="plandesc" data-show="A">기존 지붕 크기 그대로 새 지붕을 덮습니다. 앞쪽 베란다는 지금처럼 열려 있습니다.</p>
+    <p class="plandesc" data-show="B" hidden>지붕을 베란다 쪽으로 약 2m 늘려 베란다 위까지 덮습니다. 늘린 부분 끝은 기둥 4개로 받칩니다.</p>
+  </div>
+</header>
+
+<div class="layout">
+  <div class="viewer">
+    <div class="stage" id="stage">
+      <div class="views" role="group" aria-label="보기 각도">
+        <button class="btn" id="v-photo" aria-pressed="true">전체 모습</button>
+        <button class="btn" id="v-plan" aria-pressed="false">위에서 보기</button>
+        <button class="btn" id="v-front" aria-pressed="false">정면</button>
+        <button class="btn" id="v-side" aria-pressed="false">옆면</button>
+        <button class="btn" id="v-close" aria-pressed="false">처마 가까이</button>
+      </div>
+    </div>
+    <div class="toggles">
+      <span>속 구조 보기:</span>
+      <label><input type="checkbox" id="t-panel" checked><span class="sw" style="background:#4a4f55"></span>지붕판넬</label>
+      <label><input type="checkbox" id="t-cap" checked><span class="sw" style="background:#3d4147"></span>마감 캡</label>
+      <label><input type="checkbox" id="t-purlin" checked><span class="sw" style="background:#d9531e"></span>C형강</label>
+      <label><input type="checkbox" id="t-rafter" checked><span class="sw" style="background:#3d4a5c"></span>각파이프</label>
+      <label><input type="checkbox" id="t-gutter" checked><span class="sw" style="background:#3d4147"></span>물받이</label>
+      <label><input type="checkbox" id="t-house" checked><span class="sw" style="background:#ebe6dc"></span>건물</label>
+    </div>
+  </div>
+
+  <div class="col">
+    <section class="card">
+      <h2>시공 내용</h2>
+      <div class="spec">
+        <div><span>지붕 면적</span><b><span data-show="A">약 81㎡</span><span data-show="B" hidden>약 106㎡</span></b></div>
+        <div><span>지붕재</span><b>샌드위치 판넬 50T</b></div>
+        <div><span>색상</span><b><i class="swatch"></i>진회색</b></div>
+        <div><span>지붕 모양</span><b>박공 (기존 경사 유지)</b></div>
+        <div><span>베란다</span><b><span data-show="A">열림</span><span data-show="B" hidden>지붕으로 덮음</span></b></div>
+      </div>
+    </section>
+
+    <section class="card plan">
+      <h2>위에서 본 지붕 <small>단위 mm</small></h2>
+      <img data-show="A" src="plan-top-cA.png" alt="A안 위에서 본 지붕" width="1600" height="1000" loading="lazy">
+      <img data-show="B" hidden src="plan-top-cB.png" alt="B안 위에서 본 지붕: 베란다 쪽 2m 연장" width="1600" height="1000" loading="lazy">
+    </section>
+
+    <section class="card">
+      <h2>공사 순서</h2>
+      <ol class="steps">
+        <li><i class="n">1</i><div><b>철골 설치</b><span>기존 콘크리트 지붕 경사에 맞춰 각파이프를 바로 붙여 고정하고, 그 위에 C형강을 가로로 얹습니다. 지붕 높이는 기존보다 약 20cm만 올라갑니다.<span data-show="B" hidden> B안은 베란다 위로 늘린 부분 끝에 기둥 4개를 세우고 박공 모양 서까래를 걸어 C형강을 받칩니다.</span></span></div></li>
+        <li><i class="n">2</i><div><b>지붕판넬 덮기</b><span>단열이 되는 50mm 샌드위치 지붕판넬(진회색)을 처마 쪽으로 물이 흐르게 덮고 피스로 고정합니다.</span></div></li>
+        <li><i class="n">3</i><div><b>마감</b><span>용마루에는 용마루 캡, 박공 옆면에는 판넬 끝을 감싸는 캡을 끼워 마감합니다. 박공 옆 콘크리트 면은 그대로 보입니다.</span></div></li>
+        <li><i class="n">4</i><div><b>물받이</b><span>물이 흘러내리는 양쪽 처마 끝에 물받이를 답니다.</span></div></li>
+      </ol>
+    </section>
+    <p class="note">이 화면은 완성 예상도입니다. 1층·베란다 크기, 창문·문·외벽 등 건물 모습은 예시이며, 실제 색상과 세부 치수는 현장 실측 후 달라질 수 있습니다.</p>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+const mm=v=>v/1000;
+const stage=document.getElementById('stage');
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputEncoding=THREE.sRGBEncoding;
+stage.insertBefore(renderer.domElement,stage.firstChild);
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0xcfd8e2);
+scene.fog=new THREE.Fog(0xd5dbe3,40,90);
+const camera=new THREE.PerspectiveCamera(42,1,0.1,200);
+const ortho=new THREE.OrthographicCamera(-1,1,1,-1,0.1,100);
+let activeCam=camera;
+const controls=new THREE.OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true; controls.maxPolarAngle=Math.PI*0.495;
+
+scene.add(new THREE.HemisphereLight(0xe8edf4,0x5d6368,0.6));
+const sun=new THREE.DirectionalLight(0xffffff,0.7);
+sun.position.set(-10,22,16); sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-20,right:20,top:20,bottom:-20,near:1,far:70});
+scene.add(sun);
+
+const M=(c,o={})=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.85,metalness:0},o));
+const matWall=M(0xebe6dc), matSlab=M(0xb4b2ad), matGround=M(0x6f757b), matGrass=M(0x7d9466), matPave=M(0xa9a6a0), matBase=M(0x86827b);
+const matFrame=M(0x3b3f45,{metalness:.3,roughness:.5}), matGlass=M(0x9fb6c8,{metalness:.6,roughness:.15}), matSill=M(0xf2f2f0), matDoor=M(0x6b4a32,{roughness:.6});
+const matPipe=M(0x3d4a5c,{metalness:.4,roughness:.5}), matC=M(0xd9531e,{metalness:.3,roughness:.55});
+const matPanel=M(0x4a4f55,{metalness:.35,roughness:.5}), matFlash=M(0x3d4147,{metalness:.4,roughness:.45});
+const matGut=M(0x3d4147,{metalness:.45,roughness:.4}), matTile=M(0xc9b9a3,{roughness:.7});
+const hiMat=M(0xffb020,{emissive:0x8a4a00,emissiveIntensity:.55,roughness:.4});
+
+const groups={};
+['house','rafter','purlin','panel','cap','ridge','gutter','spout'].forEach(k=>{groups[k]=new THREE.Group();scene.add(groups[k]);});
+
+function boxAt(g,mat,w,h,d,x,y,z,rx=0){
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
+  m.position.set(x,y,z); m.rotation.x=rx; m.castShadow=true; m.receiveShadow=true; g.add(m); return m;
+}
+// ---- dimensions (mm) : 기존 콘크리트 박공 슬래브 + 같은 경사로 철골 덧씌우기 (A면 8,000은 -z 쪽) ----
+const W=6500, TAN=0.25, SLAB=150, OHW=300;
+const COS=1/Math.hypot(1,TAN), SIN=TAN*COS, TH=Math.atan(TAN);
+const slopes=[{name:'A',d:-1,L:8000,nc:9},{name:'B',d:1,L:4500,nc:5}];
+slopes.forEach(s=>{s.run=s.L*COS; s.rise=s.L*SIN;});
+const EAVE_A=3300, RS=EAVE_A+slopes[0].rise;
+const zN=-slopes[0].run, zP=slopes[1].run;
+const slabTop=(s,t)=>({z:s.d*t*COS, y:RS-t*SIN});
+const PIPE_W=45,PIPE_H=75,C_H=75,C_W=40,PANEL_T=50;
+const RIDGE=RS+PIPE_H/COS;
+const at=(s,t)=>({z:s.d*t*COS, y:RIDGE-t*SIN});
+
+// 바닥: 잔디 + 마당 콘크리트
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(140,140),matGrass);
+ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
+const wzN=zN+OHW, wzP=zP-OHW, WX0=300, WX1=W-300;
+const H1=3200, VER=3000, X1a=WX0-VER;                    // 1층 슬래브 상단 높이, 베란다 깊이
+const UPY=mm(H1);
+const G1=new THREE.Group(); groups.house.add(G1);        // 1층 (지면 기준)
+const G2=new THREE.Group(); groups.house.add(G2);        // 2층 (1층 슬래브 위)
+boxAt(G1,matPave,mm(WX1-X1a)+5,0.04,mm(wzP-wzN)+3,mm((X1a+WX1)/2)-1.4,0.02,mm((wzN+wzP)/2));
+
+// 창문 공통
+function win(g,ax,face,n,u,yc,w,h){ // ax:'z'면 z=face 벽, 'x'면 x=face 벽, n:바깥 방향 ±1
+  const B=(mat,a,b,c,off,dy=0)=> ax==='z' ? boxAt(g,mat,a,b,c,u,yc+dy,face+n*off) : boxAt(g,mat,c,b,a,face+n*off,yc+dy,u);
+  B(matFrame,w+0.12,h+0.12,0.08,0.02); B(matGlass,w,h,0.04,0.05); B(matFrame,0.05,h,0.06,0.06); B(matSill,w+0.24,0.05,0.16,0.08,-h/2-0.09);
+}
+const zc=mm((wzN+wzP)/2), zl=mm(wzP-wzN);
+
+// ---- 1층 ----
+const FL=450;
+boxAt(G1,matBase,mm(WX1-X1a)+0.12,mm(FL),zl+0.12,mm((X1a+WX1)/2),mm(FL/2),zc);
+boxAt(G1,matWall,mm(WX1-X1a),mm(H1-SLAB-FL),zl,mm((X1a+WX1)/2),mm(FL+(H1-SLAB-FL)/2),zc);
+boxAt(G1,matSlab,mm(WX1-X1a)+0.3,mm(SLAB),zl+0.3,mm((X1a+WX1)/2),mm(H1-SLAB/2),zc);
+// 1층 창 · 현관
+[[-5.4,1.6,1.3],[-1.2,1.4,1.2],[2.3,1.2,1.2]].forEach(([u,w,h])=>win(G1,'x',mm(X1a),-1,u,1.75,w,h));
+[-1.2,1.4,4.6].forEach(u=>{win(G1,'z',mm(wzP),1,u,1.75,1.4,1.2); win(G1,'z',mm(wzN),-1,u,1.75,1.4,1.2);});
+const dz1=0.6;
+boxAt(G1,matFrame,0.08,2.22,1.06,mm(X1a)-0.02,mm(FL)+1.11,dz1);
+boxAt(G1,matDoor,0.06,2.1,0.94,mm(X1a)-0.05,mm(FL)+1.05,dz1);
+boxAt(G1,matSlab,0.9,0.1,1.7,mm(X1a)-0.45,mm(FL)+2.5,dz1);
+boxAt(G1,matBase,0.7,mm(FL)-0.15,1.5,mm(X1a)-0.35,(mm(FL)-0.15)/2,dz1);
+boxAt(G1,matBase,0.35,0.15,1.5,mm(X1a)-0.875,0.075,dz1);
+boxAt(G1,matSill,0.3,0.6,0.8,mm(WX1)+0.2,0.3,0.4);
+
+// ---- 2층 베란다 (1층 지붕 위, 2층 앞쪽) ----
+const PH=1000, PT=150;
+boxAt(G1,matTile,mm(VER)-0.02,0.03,zl-0.02,mm((X1a+WX0)/2),mm(H1)+0.015,zc);
+boxAt(G1,matWall,mm(PT),mm(PH),zl+0.3,mm(X1a)-0.075+0.075,mm(H1+PH/2),zc);                 // 앞 난간벽
+[[mm(wzN)-0.075,],[mm(wzP)+0.075]].forEach(([z])=>boxAt(G1,matWall,mm(VER),mm(PH),mm(PT),mm((X1a+WX0)/2)-0.075,mm(H1+PH/2),z));
+boxAt(G1,matSill,mm(PT)+0.06,0.05,zl+0.36,mm(X1a),mm(H1+PH)+0.025,zc);
+[[mm(wzN)-0.075],[mm(wzP)+0.075]].forEach(([z])=>boxAt(G1,matSill,mm(VER),0.05,mm(PT)+0.06,mm((X1a+WX0)/2)-0.075,mm(H1+PH)+0.025,z));
+// 베란다 화분 · 의자 (분위기)
+boxAt(G1,matBase,0.5,0.45,0.5,mm(X1a)+0.5,mm(H1)+0.225,mm(wzN)+0.6);
+boxAt(G1,matGrass,0.45,0.4,0.45,mm(X1a)+0.5,mm(H1)+0.6,mm(wzN)+0.6);
+boxAt(G1,matSill,0.3,0.6,0.8,mm(X1a)+0.6,mm(H1)+0.3,mm(wzP)-1.0);
+
+// ---- 2층 벽체 (박공 압출, 1층 슬래브 위) ----
+const yUnder=z=>RS-Math.abs(z)*TAN-SLAB/COS;
+const shape=new THREE.Shape();
+shape.moveTo(mm(wzN),0); shape.lineTo(mm(wzP),0); shape.lineTo(mm(wzP),mm(yUnder(wzP)));
+shape.lineTo(0,mm(RS-SLAB/COS)); shape.lineTo(mm(wzN),mm(yUnder(wzN))); shape.lineTo(mm(wzN),0);
+const wall=new THREE.Mesh(new THREE.ExtrudeGeometry(shape,{depth:mm(WX1-WX0),bevelEnabled:false}),matWall);
+wall.rotation.y=-Math.PI/2; wall.position.set(mm(WX1),0,0); wall.castShadow=true; wall.receiveShadow=true; G2.add(wall);
+slopes.forEach(s=>{const m=slabTop(s,s.L/2);
+  boxAt(G2,matSlab,mm(W+200),mm(SLAB),mm(s.L),mm(W/2),mm(m.y-SLAB/2/COS),mm(m.z),s.d*TH);});
+// 2층 창 · 베란다 출입문
+[1.6,4.7].forEach(x=>{win(G2,'z',mm(wzP),1,x,1.4,1.2,1.1); win(G2,'z',mm(wzN),-1,x,1.4,1.4,1.2);});
+win(G2,'x',mm(WX0),-1,mm(wzN)+1.6,1.4,1.4,1.2); win(G2,'x',mm(WX1),1,mm(wzN)+2.0,1.4,1.2,1.1); win(G2,'x',mm(WX1),1,0.5,1.4,1.0,1.0);
+const dz=-1.2;
+boxAt(G2,matFrame,0.08,2.22,1.86,mm(WX0)-0.02,1.11,dz);
+boxAt(G2,matGlass,0.05,2.1,1.74,mm(WX0)-0.05,1.05,dz);
+boxAt(G2,matFrame,0.06,2.1,0.05,mm(WX0)-0.07,1.05,dz);
+
+// ---- 철골 · 판넬 : A안(현재 지붕 그대로) / B안(베란다 쪽으로 2m 연장 + 기둥) ----
+const EXT={A:0,B:2000};
+groups.post=new THREE.Group(); scene.add(groups.post);
+const RG={}; const PGs={};
+const matPost=M(0x3d4a5c,{metalness:.45,roughness:.45});
+['A','B'].forEach(plan=>{
+  const ext=EXT[plan], X0=-ext, LEN=W+ext, XC=(W-ext)/2;
+  const sub={}; ['rafter','purlin','panel','cap','ridge','gutter','post'].forEach(k=>{sub[k]=new THREE.Group();groups[k].add(sub[k]);});
+  RG[plan]=sub; PGs[plan]={A:new THREE.Group(),B:new THREE.Group()}; sub.panel.add(PGs[plan].A); sub.panel.add(PGs[plan].B);
+  slopes.forEach(s=>{
+    const rot=s.d*TH;
+    const xs=[0,1,2,3].map(i=>Math.min(Math.max(i*W/3,PIPE_W/2),W-PIPE_W/2));
+    if(ext) xs.push(X0+PIPE_W/2);                       // B안: 새 박공 끝 서까래
+    xs.forEach(x=>{const m=at(s,s.L/2);
+      boxAt(sub.rafter,matPipe,mm(PIPE_W),mm(PIPE_H),mm(s.L),mm(x),mm(m.y-PIPE_H/2/COS),mm(m.z),rot);});
+    for(let j=0;j<s.nc;j++){
+      let t=j*s.L/(s.nc-1); t=Math.min(Math.max(t,C_W/2+30),s.L-C_W/2);
+      const p=at(s,t);
+      boxAt(sub.purlin,matC,mm(LEN),mm(C_H),mm(C_W),mm(XC),mm(p.y+C_H/2/COS),mm(p.z),rot);
+    }
+    const len=s.L+100, tm=(s.L+100)/2, n=Math.ceil(LEN/1000);
+    for(let k=0;k<n;k++){
+      const x0=X0+k*1000, wd=Math.min(1000,W-x0);
+      const p=at(s,tm), y=p.y+C_H/COS+PANEL_T/2/COS+4;
+      boxAt(PGs[plan][s.name],matPanel,mm(wd)-0.004,mm(PANEL_T),mm(len),mm(x0+wd/2),mm(y),mm(p.z),rot);
+      [0.17,0.5,0.83].forEach(f=>{ if(wd<1000&&f>0.5) return;
+        boxAt(PGs[plan][s.name],matPanel,mm(50),mm(35),mm(len),mm(x0+f*wd),mm(y+(PANEL_T/2+17)/COS),mm(p.z),rot);});
+    }
+    [-1,1].forEach(side=>{const p=at(s,tm), yp=p.y+C_H/COS+PANEL_T/2/COS+4;
+      const xo=side<0?X0-8:W+8, xl=side<0?X0+22:W-22;
+      boxAt(sub.cap,matFlash,mm(10),mm(110),mm(len),mm(xo),mm(yp+12/COS),mm(p.z),rot);
+      boxAt(sub.cap,matFlash,mm(60),mm(6),mm(len),mm(xl),mm(yp+(PANEL_T/2+38)/COS),mm(p.z),rot);
+    });
+    const pe=at(s,s.L+100), gTop=pe.y+C_H/COS-15, gz=pe.z+s.d*40, GW=150, GD=130;
+    boxAt(sub.gutter,matGut,mm(LEN+160),mm(6),mm(GW),mm(XC),mm(gTop-GD),mm(gz));
+    boxAt(sub.gutter,matGut,mm(LEN+160),mm(GD),mm(6),mm(XC),mm(gTop-GD/2),mm(gz+s.d*GW/2));
+    boxAt(sub.gutter,matGut,mm(LEN+160),mm(GD-30),mm(6),mm(XC),mm(gTop-GD/2-15),mm(gz-s.d*GW/2));
+    [X0-80,W+80].forEach(x=>boxAt(sub.gutter,matGut,mm(6),mm(GD),mm(GW),mm(x),mm(gTop-GD/2),mm(gz)));
+    // B안 기둥 □100×100 (베란다 바닥 → 박공 끝 서까래 밑)
+    if(ext){
+      const ts=s.name==='A'?[60,s.L/2,s.L-250]:[s.L-250];
+      ts.forEach(t=>{const p=at(s,t), top=p.y-PIPE_H/COS-10, xp=X0+PIPE_W/2;
+        boxAt(sub.post,matPost,0.1,mm(top),0.1,mm(xp),mm(top)/2,mm(p.z));
+        boxAt(sub.post,matPost,0.22,0.012,0.22,mm(xp),0.006,mm(p.z));});
+    }
+  });
+  [1,-1].forEach(d=>boxAt(sub.ridge,matFlash,mm(LEN+60),mm(12),mm(320),mm(XC),mm(RIDGE+C_H/COS+PANEL_T/COS+40-160*SIN),mm(d*150),d*TH));
+});
+// 2층 위 요소들 들어올리기
+[G2,groups.rafter,groups.purlin,groups.panel,groups.cap,groups.ridge,groups.gutter,groups.spout,groups.post].forEach(g=>g.position.y=UPY);
+let curPlan='A';
+const PG={get A(){return PGs[curPlan].A},get B(){return PGs[curPlan].B}};
+function setPlan(p){curPlan=p;['A','B'].forEach(k=>Object.values(RG[k]).forEach(g=>g.visible=(k===p)));
+  document.querySelectorAll('[data-plan]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.plan===p?'true':'false'));
+  document.querySelectorAll('[data-show]').forEach(el=>el.hidden=(el.dataset.show!==p));
+  if(window.__onPlan) window.__onPlan(p);}
+setPlan('A');
+
+// ---- 보기 ----
+const CX=mm((X1a+W)/2)+0.3, CZ=(zN+zP)/2/1000;
+ortho.position.set(CX,40,CZ); ortho.up.set(1,0,0); ortho.lookAt(CX,0,CZ);
+function fitOrtho(aspect){const hh=Math.max(5.6,7.2/aspect);ortho.left=-hh*aspect;ortho.right=hh*aspect;ortho.top=hh;ortho.bottom=-hh;ortho.updateProjectionMatrix();}
+const views={
+  photo:{p:[-15,4.2,11.5],t:[1.6,4.6,-1.8]},
+  front:{p:[-24,5.2,-1.7],t:[1.6,4.4,-1.7]},
+  side:{p:[1.6,6.5,-31],t:[1.6,4.4,-1.7]},
+  close:{p:[-4.2,5.6,-12.6],t:[0.8,6.6,-7.0]},
+  plan:null
+};
+function setView(k){
+  if(k==='plan'){activeCam=ortho;controls.enabled=false;}
+  else{activeCam=camera;controls.enabled=true;const v=views[k];const f=Math.max(1,1.45/camera.aspect);
+    camera.position.set(v.t[0]+(v.p[0]-v.t[0])*f,v.t[1]+(v.p[1]-v.t[1])*f,v.t[2]+(v.p[2]-v.t[2])*f);controls.target.set(...v.t);controls.update();}
+  document.querySelectorAll('.views .btn').forEach(b=>b.setAttribute('aria-pressed',b.id==='v-'+k?'true':'false'));
+}
+Object.keys(views).forEach(k=>document.getElementById('v-'+k).addEventListener('click',()=>setView(k)));
+
+document.querySelectorAll('[data-plan]').forEach(b=>b.addEventListener('click',()=>setPlan(b.dataset.plan)));
+window.__setPlan=setPlan;
+// ---- 보이기 토글 ----
+const TOG={panel:['panel'],cap:['cap','ridge'],purlin:['purlin'],rafter:['rafter','post'],gutter:['gutter','spout'],house:['house']};
+function setVis(t,on){TOG[t].forEach(g=>groups[g].visible=on);document.getElementById('t-'+t).checked=on;}
+Object.keys(TOG).forEach(t=>document.getElementById('t-'+t).addEventListener('change',e=>setVis(t,e.target.checked)));
+
+// ---- 렌더 ----
+function resize(){const r=stage.getBoundingClientRect();renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();fitOrtho(r.width/r.height);}
+new ResizeObserver(resize).observe(stage); resize();
+setView('photo');
+(function loop(){controls.update();renderer.render(scene,activeCam);requestAnimationFrame(loop);})();
+window.__setView=setView;
+})();
+</script>
+
+</body></html>
