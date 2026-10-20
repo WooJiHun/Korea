@@ -1205,7 +1205,8 @@ tfoot td{font-weight:700;border-bottom:none;padding-top:10px}
 } )();
 </script>
 <script>
-(function(){
+(function boot(){
+if(!(window.THREE&&THREE.OrbitControls)){return setTimeout(boot,50);}
 const mm=v=>v/1000;
 const stage=document.getElementById('stage');
 const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
